@@ -1,8 +1,8 @@
-# DWSIM5 FlowsheetSolver - 流程图求解器
+#  FlowsheetSolver - 流程图求解器
 
 ## 项目概述
 
-DWSIM5 FlowsheetSolver 是一个用于化工流程图求解的 Python 模块，从原 VB.NET 版本 1:1 转换实现。该模块提供了完整的流程图求解功能，包括：
+ FlowsheetSolver 是一个用于化工流程图求解的 Python 模块，从原 VB.NET 版本 1:1 转换实现。该模块提供了完整的流程图求解功能，包括：
 
 - 📊 **流程图求解**: 支持同步、异步、并行、远程等多种求解模式
 - 🔄 **循环收敛求解**: 实现 Broyden、Newton-Raphson 等收敛算法
