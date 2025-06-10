@@ -486,10 +486,9 @@ mypy .
 
 ## 📞 联系我们
 
-- 项目主页: https://github.com/dwsim-python/dwsim-python
-- 问题反馈: https://github.com/dwsim-python/dwsim-python/issues
-- 文档站点: https://dwsim-python.readthedocs.io/
-- 讨论社区: https://github.com/dwsim-python/dwsim-python/discussions
+- 项目主页: https://github.com/zhu04303661/OpenAspen
+- 问题反馈: https://github.com/zhu04303661/OpenAspen/issues
+- 文档站点: https://github.com/zhu04303661/OpenAspen/tree/main/docs
 
 ## 📚 相关资源
 
