@@ -1,0 +1,169 @@
+{
+  "database_info": {
+    "name": "DWSIM Components Database",
+    "version": "1.0.0",
+    "description": "化工组分物性数据库",
+    "last_updated": "2024-01-01"
+  },
+  "components": [
+    {
+      "name": "Methane",
+      "cas_number": "74-82-8",
+      "formula": "CH4",
+      "molecular_weight": 16.043,
+      "critical_temperature": 190.564,
+      "critical_pressure": 4599000,
+      "critical_volume": 0.0986,
+      "acentric_factor": 0.01155,
+      "antoine_coefficients": [15.2243, 897.84, -7.16],
+      "cp_coefficients": [33.298, 79.933e-3, -4.926e-5, 1.013e-8],
+      "unifac_groups": {
+        "1": 1
+      },
+      "elements": {
+        "C": 1,
+        "H": 4
+      }
+    },
+    {
+      "name": "Ethane",
+      "cas_number": "74-84-0", 
+      "formula": "C2H6",
+      "molecular_weight": 30.070,
+      "critical_temperature": 305.32,
+      "critical_pressure": 4872000,
+      "critical_volume": 0.1455,
+      "acentric_factor": 0.0995,
+      "antoine_coefficients": [15.6637, 1511.42, -17.16],
+      "cp_coefficients": [52.487, 138.19e-3, -6.818e-5, 1.281e-8],
+      "unifac_groups": {
+        "1": 2
+      },
+      "elements": {
+        "C": 2,
+        "H": 6
+      }
+    },
+    {
+      "name": "Propane",
+      "cas_number": "74-98-6",
+      "formula": "C3H8", 
+      "molecular_weight": 44.097,
+      "critical_temperature": 369.83,
+      "critical_pressure": 4248000,
+      "critical_volume": 0.2000,
+      "acentric_factor": 0.1523,
+      "antoine_coefficients": [15.726, 1872.46, -25.16],
+      "cp_coefficients": [68.032, 228.88e-3, -1.271e-4, 2.537e-8],
+      "unifac_groups": {
+        "1": 2,
+        "2": 1
+      },
+      "elements": {
+        "C": 3,
+        "H": 8
+      }
+    },
+    {
+      "name": "n-Butane",
+      "cas_number": "106-97-8",
+      "formula": "C4H10",
+      "molecular_weight": 58.123,
+      "critical_temperature": 425.12,
+      "critical_pressure": 3796000,
+      "critical_volume": 0.2547,
+      "acentric_factor": 0.2002,
+      "antoine_coefficients": [15.6782, 2154.90, -34.42],
+      "cp_coefficients": [98.49, 306.62e-3, -1.482e-4, 2.580e-8],
+      "unifac_groups": {
+        "1": 2,
+        "2": 2
+      },
+      "elements": {
+        "C": 4,
+        "H": 10
+      }
+    },
+    {
+      "name": "Water",
+      "cas_number": "7732-18-5",
+      "formula": "H2O",
+      "molecular_weight": 18.015,
+      "critical_temperature": 647.1,
+      "critical_pressure": 22064000,
+      "critical_volume": 0.0559,
+      "acentric_factor": 0.3449,
+      "antoine_coefficients": [16.3872, 3885.70, -42.98],
+      "cp_coefficients": [33.933, 26.79e-3, 0.08424e-5, -9.426e-9],
+      "unifac_groups": {
+        "17": 1
+      },
+      "elements": {
+        "H": 2,
+        "O": 1
+      }
+    },
+    {
+      "name": "Benzene",
+      "cas_number": "71-43-2",
+      "formula": "C6H6",
+      "molecular_weight": 78.114,
+      "critical_temperature": 562.05,
+      "critical_pressure": 4895000,
+      "critical_volume": 0.2594,
+      "acentric_factor": 0.2103,
+      "antoine_coefficients": [15.9008, 2788.51, -52.36],
+      "cp_coefficients": [33.35, 473.2e-3, -3.126e-4, 7.279e-8],
+      "unifac_groups": {
+        "9": 6
+      },
+      "elements": {
+        "C": 6,
+        "H": 6
+      }
+    },
+    {
+      "name": "Toluene",
+      "cas_number": "108-88-3",
+      "formula": "C7H8",
+      "molecular_weight": 92.141,
+      "critical_temperature": 591.75,
+      "critical_pressure": 4108000,
+      "critical_volume": 0.3164,
+      "acentric_factor": 0.2633,
+      "antoine_coefficients": [16.0137, 3096.52, -53.67],
+      "cp_coefficients": [58.14, 544.9e-3, -3.051e-4, 6.130e-8],
+      "unifac_groups": {
+        "1": 1,
+        "9": 5,
+        "10": 1
+      },
+      "elements": {
+        "C": 7,
+        "H": 8
+      }
+    },
+    {
+      "name": "Ethanol",
+      "cas_number": "64-17-5",
+      "formula": "C2H5OH",
+      "molecular_weight": 46.069,
+      "critical_temperature": 513.9,
+      "critical_pressure": 6137000,
+      "critical_volume": 0.1673,
+      "acentric_factor": 0.6436,
+      "antoine_coefficients": [16.8958, 3795.17, -46.424],
+      "cp_coefficients": [61.34, 154.9e-3, -8.039e-5, 1.676e-8],
+      "unifac_groups": {
+        "1": 1,
+        "2": 1,
+        "14": 1
+      },
+      "elements": {
+        "C": 2,
+        "H": 6,
+        "O": 1
+      }
+    }
+  ]
+} 

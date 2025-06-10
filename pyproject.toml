@@ -1,0 +1,119 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dwsim-python"
+version = "1.0.0"
+description = "DWSIM5 Python重新实现 - 化工过程仿真平台"
+authors = [
+    {name = "DWSIM Python Team", email = "dwsim-python@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+keywords = ["thermodynamics", "chemical engineering", "process simulation", "dwsim"]
+
+dependencies = [
+    "fastapi>=0.104.1",
+    "uvicorn>=0.24.0",
+    "pydantic>=2.5.0",
+    "numpy>=1.24.3",
+    "scipy>=1.11.4",
+    "pandas>=2.0.3",
+    "CoolProp>=6.4.1",
+    "thermo>=0.2.20",
+    "pyyaml>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-asyncio>=0.21.1",
+    "black>=23.9.1",
+    "flake8>=6.1.0",
+    "mypy>=1.6.1",
+]
+database = [
+    "sqlalchemy>=2.0.23",
+    "alembic>=1.12.1",
+]
+cache = [
+    "redis>=5.0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/dwsim-python/dwsim-python"
+Documentation = "https://dwsim-python.readthedocs.io/"
+Repository = "https://github.com/dwsim-python/dwsim-python.git"
+Issues = "https://github.com/dwsim-python/dwsim-python/issues"
+
+[project.scripts]
+dwsim-api = "dwsim_api.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["flowsheet_solver*", "dwsim_*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+] 
