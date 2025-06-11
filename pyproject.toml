@@ -113,7 +113,63 @@ addopts = [
     "--verbose",
 ]
 markers = [
+    # 测试类型标记
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "fast: marks tests as fast",
     "integration: marks tests as integration tests",
     "unit: marks tests as unit tests",
+    "smoke: marks tests as smoke tests for quick validation",
+    "performance: marks tests as performance/benchmark tests",
+    
+    # 架构层级标记
+    "foundation: marks tests as foundation/basic framework tests",
+    "basic_ops: marks tests as basic unit operations tests",
+    "advanced: marks tests as advanced unit operations tests",
+    
+    # 系统模块标记
+    "reactors: marks tests as reactor system tests",
+    "logical: marks tests as logical block tests",
+    "solver: marks tests as solver integration tests",
+    "cape_open: marks tests as CAPE-OPEN integration tests",
+    "validation: marks tests as validation/debugging tests",
+    
+    # 具体设备标记
+    "mixer: marks tests as mixer unit operation tests",
+    "splitter: marks tests as splitter unit operation tests",
+    "heater: marks tests as heater unit operation tests",
+    "cooler: marks tests as cooler unit operation tests",
+    "pump: marks tests as pump unit operation tests",
+    "compressor: marks tests as compressor unit operation tests",
+    "valve: marks tests as valve unit operation tests",
+    "heat_exchanger: marks tests as heat exchanger unit operation tests",
+    
+    # 特殊功能标记
+    "parametrize: marks tests as parametrized tests",
+    "error_handling: marks tests as error handling tests",
+    "memory: marks tests as memory usage tests",
+    "concurrent: marks tests as concurrent execution tests",
+    
+    # 额外功能标记
+    "calculation_args: marks tests as calculation arguments tests",
+    "solver_exceptions: marks tests as solver exception handling tests",
+    "flowsheet_solver: marks tests as flowsheet solver tests",
+    "convergence_solver: marks tests as convergence solver tests",
+    "remote_solvers: marks tests as remote solver tests",
+    "extended_operations: marks tests as extended operations tests",
+    "benchmarks: marks tests as benchmark tests",
+    
+    # 数学模块标记
+    "math_core: marks tests as core math module tests",
+    "math_numerics: marks tests as numerics module tests",
+    "math_solvers: marks tests as math solver tests",
+    "math_optimization: marks tests as optimization algorithm tests",
+    "math_random: marks tests as random number generation tests",
+    "math_integration: marks tests as math integration tests",
+    "math_performance: marks tests as math performance benchmark tests",
+    "matrix_ops: marks tests as matrix operations tests",
+    "interpolation: marks tests as interpolation algorithm tests",
+    "complex_number: marks tests as complex number tests",
+    "brent_solver: marks tests as Brent solver tests",
+    "lbfgs: marks tests as L-BFGS optimization tests",
+    "mersenne_twister: marks tests as Mersenne Twister tests",
 ] 

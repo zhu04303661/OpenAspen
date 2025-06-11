@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 """
-DWSIM 单元操作统一pytest运行器
-=============================
+DWSIM 单元操作与数学库统一pytest运行器
+===================================
 
-整合所有DWSIM单元操作测试的统一运行器。
+整合所有DWSIM单元操作和数学库测试的统一运行器。
 
 功能特性：
-1. 统一的测试文件管理
+1. 统一的测试文件管理 (DWSIM单元操作 + 数学库)
 2. 完整的标记过滤系统
-3. 性能测试和基准测试
-4. 覆盖率分析
-5. 并行测试执行
-6. 详细的测试报告
+3. 按组件和模块分类测试
+4. 性能测试和基准测试
+5. 覆盖率分析
+6. 并行测试执行
+7. 详细的测试报告
 
-基于test_dwsim_unified.py的全面验证。
+支持的测试模块：
+- DWSIM单元操作测试 (test_dwsim_unified.py)
+- DWSIM数学库测试 (test_dwsim_math.py)
 """
 
 import os
@@ -43,13 +46,23 @@ class UnifiedDWSIMPytestRunner:
         self.test_dir = current_dir
         self.project_root = project_root
         
-        # 统一测试文件
-        self.unified_test_file = "unified/test_dwsim_unified.py"
+        # 测试文件映射
+        self.test_files = {
+            "dwsim_unified": "unified/test_dwsim_unified.py",
+            "dwsim_math": "test_dwsim_math.py"
+        }
         
         # 检查测试文件是否存在
-        self.test_file_path = self.test_dir / self.unified_test_file
-        if not self.test_file_path.exists():
-            print(f"❌ 统一测试文件不存在: {self.test_file_path}")
+        self.available_test_files = {}
+        for name, file_path in self.test_files.items():
+            full_path = self.test_dir / file_path
+            if full_path.exists():
+                self.available_test_files[name] = full_path
+            else:
+                print(f"⚠️  测试文件不存在: {full_path}")
+        
+        if not self.available_test_files:
+            print("❌ 没有可用的测试文件")
             sys.exit(1)
         
         # 测试标记
@@ -65,10 +78,15 @@ class UnifiedDWSIMPytestRunner:
             "unit", "performance", "smoke", "slow", "fast",
             # 特殊功能标记
             "parametrize", "error_handling", "memory", "concurrent",
-            # 新增标记 - 扩展核心系统
+            # 扩展核心系统标记
             "calculation_args", "solver_exceptions", "flowsheet_solver",
             "convergence_solver", "remote_solvers", "extended_operations",
-            "benchmarks"
+            "benchmarks",
+            # 数学模块标记
+            "math_core", "math_numerics", "math_solvers", "math_optimization",
+            "math_random", "math_integration", "math_performance",
+            "matrix_ops", "interpolation", "complex_number", "brent_solver",
+            "lbfgs", "mersenne_twister"
         ]
         
         # 默认pytest参数
@@ -90,7 +108,8 @@ class UnifiedDWSIMPytestRunner:
                   smoke_only: bool = False,
                   verbose: bool = True,
                   maxfail: Optional[int] = None,
-                  extra_args: Optional[List[str]] = None) -> int:
+                  extra_args: Optional[List[str]] = None,
+                  test_files: Optional[List[str]] = None) -> int:
         """
         运行统一测试
         
@@ -105,6 +124,7 @@ class UnifiedDWSIMPytestRunner:
             verbose: 详细输出
             maxfail: 最大失败数
             extra_args: 额外的pytest参数
+            test_files: 指定的测试文件列表
             
         Returns:
             int: 退出代码
@@ -118,8 +138,18 @@ class UnifiedDWSIMPytestRunner:
         # 添加默认参数
         cmd.extend(self.default_pytest_args)
         
-        # 指定统一测试文件
-        cmd.append(str(self.test_file_path))
+        # 指定测试文件
+        if test_files:
+            # 使用指定的测试文件
+            for test_file in test_files:
+                if test_file in self.available_test_files:
+                    cmd.append(str(self.available_test_files[test_file]))
+                else:
+                    print(f"⚠️  未知测试文件: {test_file}")
+        else:
+            # 运行所有可用的测试文件
+            for file_path in self.available_test_files.values():
+                cmd.append(str(file_path))
         
         # 处理标记过滤
         if performance_only:
@@ -257,7 +287,9 @@ class UnifiedDWSIMPytestRunner:
             "具体设备": ["mixer", "splitter", "heater", "cooler", "pump", "compressor", "valve", "heat_exchanger"],
             "测试类型": ["unit", "performance", "smoke", "slow", "fast"],
             "特殊功能": ["parametrize", "error_handling", "memory", "concurrent"],
-            "扩展核心系统": ["calculation_args", "solver_exceptions", "flowsheet_solver", "convergence_solver", "remote_solvers", "extended_operations", "benchmarks"]
+            "扩展核心系统": ["calculation_args", "solver_exceptions", "flowsheet_solver", "convergence_solver", "remote_solvers", "extended_operations", "benchmarks"],
+            "数学计算模块": ["math_core", "math_numerics", "math_solvers", "math_optimization", "math_random", "math_integration", "math_performance"],
+            "数学具体组件": ["matrix_ops", "interpolation", "complex_number", "brent_solver", "lbfgs", "mersenne_twister"]
         }
         
         mark_descriptions = {
@@ -297,14 +329,31 @@ class UnifiedDWSIMPytestRunner:
             "memory": "内存测试 - 内存使用和泄漏检测",
             "concurrent": "并发测试 - 多线程和并行处理",
             
-            # 新增核心系统标记
+            # 扩展核心系统标记
             "calculation_args": "计算参数系统测试 - CalculationArgs类和枚举",
             "solver_exceptions": "求解器异常系统测试 - 异常层次和处理",
             "flowsheet_solver": "FlowsheetSolver核心测试 - 主求解器功能",
             "convergence_solver": "收敛求解器测试 - Broyden、Newton-Raphson等",
             "remote_solvers": "远程求解器测试 - TCP、Azure客户端",
             "extended_operations": "扩展单元操作测试 - 压缩机、阀门、管道等",
-            "benchmarks": "基准性能测试 - 大型流程图、内存、并行计算"
+            "benchmarks": "基准性能测试 - 大型流程图、内存、并行计算",
+            
+            # 数学计算模块标记
+            "math_core": "核心数学模块测试 - 基础统计、通用数学函数",
+            "math_numerics": "数值计算模块测试 - 复数运算、数值方法",
+            "math_solvers": "数学求解器测试 - Brent算法、非线性方程求解",
+            "math_optimization": "优化算法测试 - L-BFGS、无约束优化",
+            "math_random": "随机数生成测试 - Mersenne Twister、统计验证",
+            "math_integration": "数学集成测试 - 模块间协作验证",
+            "math_performance": "数学性能测试 - 算法效率、扩展性基准",
+            
+            # 数学具体组件标记
+            "matrix_ops": "矩阵操作测试 - 行列式、求逆、线性方程组",
+            "interpolation": "插值算法测试 - 数据插值、边界条件处理",
+            "complex_number": "复数运算测试 - 基本运算、极坐标转换",
+            "brent_solver": "Brent求解器测试 - 根查找、收敛验证",
+            "lbfgs": "L-BFGS优化测试 - 二次函数、Rosenbrock函数优化",
+            "mersenne_twister": "Mersenne Twister测试 - 随机数质量、重现性验证"
         }
         
         for category, marks in mark_categories.items():
@@ -328,9 +377,20 @@ class UnifiedDWSIMPytestRunner:
         print("💨 运行冒烟测试")
         return self.run_tests(smoke_only=True)
     
+    def run_math_tests(self) -> int:
+        """运行数学模块测试"""
+        print("🧮 运行数学模块测试")
+        return self.run_tests(test_files=["dwsim_math"])
+    
+    def run_dwsim_tests(self) -> int:
+        """运行DWSIM单元操作测试"""
+        print("⚗️  运行DWSIM单元操作测试")
+        return self.run_tests(test_files=["dwsim_unified"])
+    
     def run_by_component(self, component: str) -> int:
         """按组件运行测试"""
         component_markers = {
+            # DWSIM 单元操作组件
             "foundation": ["foundation"],
             "mixer": ["mixer"],
             "heater": ["heater"],
@@ -345,7 +405,7 @@ class UnifiedDWSIMPytestRunner:
             "validation": ["validation"],
             "basic_ops": ["basic_ops"],
             "advanced": ["advanced"],
-            # 新增组件映射
+            # 扩展核心系统组件
             "calculation_args": ["calculation_args"],
             "solver_exceptions": ["solver_exceptions"],
             "flowsheet_solver": ["flowsheet_solver"],
@@ -356,7 +416,22 @@ class UnifiedDWSIMPytestRunner:
             "compressor": ["compressor"],
             "performance_tests": ["performance", "benchmarks"],
             "core_solver": ["flowsheet_solver", "convergence_solver", "solver"],
-            "exceptions": ["solver_exceptions", "error_handling"]
+            "exceptions": ["solver_exceptions", "error_handling"],
+            # 数学模块组件
+            "math": ["math_core", "math_numerics", "math_solvers", "math_optimization", "math_random"],
+            "math_core": ["math_core", "matrix_ops", "interpolation"],
+            "math_numerics": ["math_numerics", "complex_number"],
+            "math_solvers": ["math_solvers", "brent_solver"],
+            "math_optimization": ["math_optimization", "lbfgs"],
+            "math_random": ["math_random", "mersenne_twister"],
+            "math_integration": ["math_integration"],
+            "math_performance": ["math_performance", "slow"],
+            "matrix_ops": ["matrix_ops"],
+            "interpolation": ["interpolation"],
+            "complex_number": ["complex_number"],
+            "brent_solver": ["brent_solver"],
+            "lbfgs": ["lbfgs"],
+            "mersenne_twister": ["mersenne_twister"]
         }
         
         if component not in component_markers:
@@ -372,7 +447,10 @@ class UnifiedDWSIMPytestRunner:
         """运行测试收集验证"""
         print("📝 收集测试用例...")
         
-        cmd = ["python", "-m", "pytest", str(self.test_file_path), "--collect-only", "-q"]
+        cmd = ["python", "-m", "pytest", "--collect-only", "-q"]
+        # 添加所有可用的测试文件
+        for file_path in self.available_test_files.values():
+            cmd.append(str(file_path))
         
         os.chdir(self.test_dir)
         
@@ -421,9 +499,12 @@ def main():
   %(prog)s --quick                  # 运行快速测试
   %(prog)s --performance            # 运行性能测试
   %(prog)s --smoke                  # 运行冒烟测试
+  %(prog)s --math                   # 只运行数学模块测试
+  %(prog)s --dwsim                  # 只运行DWSIM单元操作测试
   %(prog)s --markers mixer heater   # 运行混合器和加热器测试
   %(prog)s --exclude slow           # 排除慢速测试
   %(prog)s --component mixer        # 运行混合器组件测试
+  %(prog)s --component math_core    # 运行核心数学模块测试
   %(prog)s --parallel --coverage    # 并行执行并生成覆盖率
   %(prog)s --list-marks             # 列出所有可用标记
   %(prog)s --collect                # 收集并统计测试用例
@@ -465,6 +546,18 @@ def main():
         "--smoke",
         action="store_true", 
         help="只运行冒烟测试"
+    )
+    
+    parser.add_argument(
+        "--math",
+        action="store_true",
+        help="只运行数学模块测试"
+    )
+    
+    parser.add_argument(
+        "--dwsim",
+        action="store_true",
+        help="只运行DWSIM单元操作测试"
     )
     
     # 执行选项
@@ -539,6 +632,10 @@ def main():
         return runner.run_performance_tests()
     elif args.smoke:
         return runner.run_smoke_tests()
+    elif args.math:
+        return runner.run_math_tests()
+    elif args.dwsim:
+        return runner.run_dwsim_tests()
     elif args.component:
         return runner.run_by_component(args.component)
     

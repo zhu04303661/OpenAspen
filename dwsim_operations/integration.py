@@ -57,6 +57,13 @@ class UnitOperationRegistry:
     
     def _register_default_operations(self):
         """注册默认的单元操作"""
+        # 导入扩展的单元操作类型
+        from .unit_operations import (
+            Mixer, Splitter, Heater, Cooler, HeatExchanger, Pump, 
+            Compressor, Valve, ComponentSeparator, Filter, Vessel, Tank,
+            Pipe, RigorousColumn
+        )
+        
         default_operations = {
             'Mixer': Mixer,
             'Splitter': Splitter,
@@ -69,25 +76,35 @@ class UnitOperationRegistry:
             'ComponentSeparator': ComponentSeparator,
             'Filter': Filter,
             'Vessel': Vessel,
-            'Tank': Tank
+            'Tank': Tank,
+            'Pipe': Pipe,
+            'RigorousColumn': RigorousColumn
         }
         
         for name, cls in default_operations.items():
             self.register_operation(name, cls)
     
-    def register_operation(self, name: str, operation_class: Type[UnitOpBaseClass]):
+    def register_operation(self, name: str, operation_class: Type[UnitOpBaseClass], validate: bool = True):
         """
         注册单元操作类
         
         Args:
             name: 操作名称
             operation_class: 操作类
+            validate: 是否验证操作类继承关系（默认True）
         """
-        if not issubclass(operation_class, UnitOpBaseClass):
-            raise ValueError(f"操作类 {operation_class} 必须继承自 UnitOpBaseClass")
+        if validate:
+            try:
+                if not issubclass(operation_class, UnitOpBaseClass):
+                    raise ValueError(f"操作类 {operation_class} 必须继承自 UnitOpBaseClass")
+            except TypeError:
+                # 处理动态创建的类型，可能不支持issubclass检查
+                if not hasattr(operation_class, '__mro__'):
+                    raise ValueError(f"操作类 {operation_class} 必须是有效的类")
         
         self._registry[name] = operation_class
-        self.logger.info(f"已注册单元操作: {name}")
+        if validate:  # 只在验证模式下记录日志
+            self.logger.info(f"已注册单元操作: {name}")
     
     def create_operation(self, operation_type: str, name: str = "", description: str = "") -> UnitOpBaseClass:
         """
@@ -127,6 +144,30 @@ class UnitOperationRegistry:
             bool: 是否已注册
         """
         return operation_type in self._registry
+    
+    def get_operation_class(self, operation_type: str) -> Type[UnitOpBaseClass]:
+        """
+        获取操作类
+        
+        Args:
+            operation_type: 操作类型
+            
+        Returns:
+            Type[UnitOpBaseClass]: 操作类
+        """
+        if operation_type not in self._registry:
+            raise ValueError(f"未知的单元操作类型: {operation_type}")
+        return self._registry[operation_type]
+    
+    def register_test_operation(self, name: str, operation_class: type):
+        """
+        为测试注册操作类（跳过验证）
+        
+        Args:
+            name: 操作名称
+            operation_class: 操作类
+        """
+        self._registry[name] = operation_class
 
 
 class IntegratedFlowsheetSolver(FlowsheetSolver):
